@@ -245,7 +245,7 @@ class Animationimporter(Extension):
 		for i,stream in enumerate(self.ffprobeOutput['streams']):
 			if 'height' in stream:
 				break
-        self.vid_stream_idx = i
+		self.vid_stream_idx = i
 		self.ffprobeData_height = stream['height']
 		self.ffprobeData_width = stream['width']
 
