@@ -242,12 +242,16 @@ class Animationimporter(Extension):
 		self.ffprobeOutput = subprocess.check_output(self.args).decode('utf-8')
 
 		self.ffprobeOutput = json.loads(self.ffprobeOutput)
-		self.ffprobeData_height = self.ffprobeOutput['streams'][0]['height']
-		self.ffprobeData_width = self.ffprobeOutput['streams'][0]['width']
+        for i,stream in enumerate(self.ffprobeOutput['streams'])
+            if 'height' in stream:
+                break
+        self.vid_stream_idx = i
+		self.ffprobeData_height = stream['height']
+		self.ffprobeData_width = stream['width']
 
 		# frame rate comes back in odd format...so we need to do a bit of work so it is more usable. 
 		# data will come back like "50/3"
-		rawFrameRate = self.ffprobeOutput['streams'][0]['r_frame_rate'] 
+		rawFrameRate = stream['r_frame_rate'] 
 		self.ffprobeData_frameRate = int(rawFrameRate.split("/")[0])  / int(rawFrameRate.split("/")[1])
 		self.ffprobeData_frameRate = math.ceil(self.ffprobeData_frameRate)
 
@@ -256,14 +260,14 @@ class Animationimporter(Extension):
 			# maybe first part of frame rate for GIF?
 			self.ffprobeData_totalFrameCount = int(rawFrameRate.split("/")[0]) 
 		else:
-			self.ffprobeData_totalFrameCount = int(self.ffprobeOutput['streams'][0]['nb_frames'])
+			self.ffprobeData_totalFrameCount = int(stream['nb_frames'])
 
 
 		# GIF does not bring back duration/frame data...so need to figure it out
 		if "gif" in pathToInputVideo: 
 			self.ffprobeData_totalVideoDuration = float(self.ffprobeData_totalFrameCount/self.ffprobeData_frameRate)
 		else:
-			self.ffprobeData_totalVideoDuration = float(self.ffprobeOutput['streams'][0]['duration'])
+			self.ffprobeData_totalVideoDuration = float(stream['duration'])
 
 
 		# sometimes frame rate is not set right in video. 
