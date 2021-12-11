@@ -242,9 +242,9 @@ class Animationimporter(Extension):
 		self.ffprobeOutput = subprocess.check_output(self.args).decode('utf-8')
 
 		self.ffprobeOutput = json.loads(self.ffprobeOutput)
-        for i,stream in enumerate(self.ffprobeOutput['streams'])
-            if 'height' in stream:
-                break
+		for i,stream in enumerate(self.ffprobeOutput['streams']):
+			if 'height' in stream:
+				break
         self.vid_stream_idx = i
 		self.ffprobeData_height = stream['height']
 		self.ffprobeData_width = stream['width']
